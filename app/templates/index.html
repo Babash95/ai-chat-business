@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>AI Chat Business</title>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -29,12 +30,25 @@
             font-size: 16px;
         }
 
+        select {
+            padding: 10px;
+            margin-top: 20px;
+        }
+
         button {
             margin-top: 15px;
             background: #2563eb;
             color: white;
             padding: 12px 25px;
             border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .message {
+            background: #f1f5f9;
+            padding: 10px;
+            margin: 10px 0;
             border-radius: 8px;
         }
     </style>
@@ -46,20 +60,73 @@
 
 <h1>🤖 AI Chat Business</h1>
 
-<p>AI помощник для малого бизнеса</p>
+<p>
+AI помощник для малого бизнеса
+</p>
+
+
+<div>
+
+{% for msg in messages %}
+
+<div class="message">
+
+<b>
+{% if msg.role == "user" %}
+👤 Вы:
+{% else %}
+🤖 AI:
+{% endif %}
+</b>
+
+{{ msg.text }}
+
+</div>
+
+{% endfor %}
+
+</div>
+
 
 <form action="/chat" method="post">
 
+<select name="assistant">
+
+<option value="customer">
+📞 Клиентский менеджер
+</option>
+
+<option value="marketing">
+✍️ Маркетолог
+</option>
+
+<option value="sales">
+💼 Продажи
+</option>
+
+<option value="documents">
+📄 Документы
+</option>
+
+</select>
+
+
+<br><br>
+
+
 <textarea 
 name="message"
-placeholder="Напишите вопрос..."
+placeholder="Напишите ваш вопрос..."
 ></textarea>
 
+
 <br>
+
 
 <button>
 Отправить
 </button>
+
 
 </form>
 
