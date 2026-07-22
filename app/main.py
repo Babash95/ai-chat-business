@@ -1,91 +1,47 @@
 from fastapi import FastAPI, Form
 from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+from fastapi import Request
 
 app = FastAPI()
 
+templates = Jinja2Templates(directory="app/templates")
+
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
+
 
 @app.get("/", response_class=HTMLResponse)
-def home():
-    return """
-    <html>
-    <head>
-        <title>AI Chat Business</title>
-        <style>
-            body {
-                font-family: Arial;
-                background: #f4f6f8;
-                padding: 40px;
-            }
-
-            .box {
-                max-width: 700px;
-                margin: auto;
-                background: white;
-                padding: 30px;
-                border-radius: 15px;
-                box-shadow: 0 0 15px #ccc;
-            }
-
-            textarea {
-                width: 100%;
-                height: 100px;
-            }
-
-            button {
-                margin-top: 15px;
-                padding: 12px 25px;
-                background: #2563eb;
-                color: white;
-                border: none;
-                border-radius: 8px;
-            }
-        </style>
-    </head>
-
-    <body>
-        <div class="box">
-
-        <h1>🤖 AI Chat Business</h1>
-
-        <p>AI помощник для малого бизнеса</p>
-
-        <form action="/chat" method="post">
-
-            <textarea 
-            name="message"
-            placeholder="Напишите вопрос..."
-            ></textarea>
-
-            <br>
-
-            <button>
-            Отправить
-            </button>
-
-        </form>
-
-        </div>
-    </body>
-    </html>
-    """
+def home(request: Request):
+  return templates.TemplateResponse(
+    request=request,
+    name="index.html"
+)
 
 
 @app.post("/chat", response_class=HTMLResponse)
 def chat(message: str = Form(...)):
 
-    answer = f"""
-    <h2>Ваш вопрос:</h2>
-    <p>{message}</p>
+    answer = """
+    Спасибо за ваш вопрос.
 
-    <h2>Ответ AI:</h2>
-    <p>
-    Спасибо за вопрос. 
     Я AI-помощник для малого бизнеса.
     Скоро я смогу помогать с клиентами,
     продажами и документами.
-    </p>
-
-    <a href="/">← Новый вопрос</a>
     """
 
-    return answer
+    return f"""
+    <html>
+    <body>
+        <h1>🤖 AI Chat Business</h1>
+
+        <h3>Ваш вопрос:</h3>
+        <p>{message}</p>
+
+        <h3>Ответ AI:</h3>
+        <p>{answer}</p>
+
+        <a href="/">← Новый вопрос</a>
+    </body>
+    </html>
+    """
