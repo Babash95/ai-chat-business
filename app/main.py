@@ -2,6 +2,8 @@ from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
+from app.services.ai_service import generate_response
+
 app = FastAPI()
 
 templates = Jinja2Templates(directory="app/templates")
@@ -31,52 +33,7 @@ def chat(
         "text": message
     })
 
-    if assistant == "customer":
-
-        if "не хочет" in message.lower() or "отказ" in message.lower():
-            answer = """
-            Здравствуйте!
-
-            Спасибо, что сообщили нам.
-            Мы понимаем ваше решение и хотели бы узнать причину отказа.
-
-            Возможно, мы сможем предложить удобное решение.
-            """
-
-        elif "доставка" in message.lower():
-            answer = """
-            Здравствуйте!
-
-            Приносим извинения за задержку доставки.
-            Мы проверим статус заказа и сообщим вам актуальную информацию.
-            """
-
-        else:
-            answer = """
-            Я помогу обработать обращение клиента.
-            Пожалуйста, уточните детали ситуации.
-            """
-
-    elif assistant == "marketing":
-        answer = """
-        ✍️ Я помогу создать рекламный текст,
-        посты и маркетинговые идеи.
-        """
-
-    elif assistant == "sales":
-        answer = """
-        💼 Я помогу подготовить предложения
-        и увеличить продажи.
-        """
-
-    elif assistant == "documents":
-        answer = """
-        📄 Я помогу создавать письма,
-        инструкции и документы.
-        """
-
-    else:
-        answer = "Я AI-помощник для бизнеса."
+    answer = generate_response(message, assistant)
 
     messages.append({
         "role": "ai",
