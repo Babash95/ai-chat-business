@@ -1,134 +1,87 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" href="/static/style.css">
     <title>AI Chat Business</title>
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f6f8;
-            padding: 40px;
-        }
-
-        .box {
-            max-width: 700px;
-            margin: auto;
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 0 15px #ccc;
-        }
-
-        h1 {
-            color: #2563eb;
-        }
-
-        textarea {
-            width: 100%;
-            height: 100px;
-            padding: 10px;
-            font-size: 16px;
-        }
-
-        select {
-            padding: 10px;
-            margin-top: 20px;
-        }
-
-        button {
-            margin-top: 15px;
-            background: #2563eb;
-            color: white;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        .message {
-            background: #f1f5f9;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 8px;
-        }
-    </style>
 </head>
 
 <body>
 
-<div class="box">
+<div class="chat-container">
 
-<h1>🤖 AI Chat Business</h1>
+    <h1 class="title">🤖 AI Chat Business</h1>
 
-<p>
-AI помощник для малого бизнеса
-</p>
-
-
-<div>
-
-{% for msg in messages %}
-
-<div class="message">
-
-<b>
-{% if msg.role == "user" %}
-👤 Вы:
-{% else %}
-🤖 AI:
-{% endif %}
-</b>
-
-{{ msg.text }}
-
-</div>
-
-{% endfor %}
-
-</div>
+    <p style="text-align:center;">
+        AI помощник для малого бизнеса
+    </p>
 
 
-<form action="/chat" method="post">
+    <div class="chat-box">
 
-<select name="assistant">
+        {% for msg in messages %}
 
-<option value="customer">
-📞 Клиентский менеджер
-</option>
+        {% if msg.role == "user" %}
 
-<option value="marketing">
-✍️ Маркетолог
-</option>
+        <div class="message user">
+            👤 <b>Вы:</b><br>
+            {{ msg.text }}
+        </div>
 
-<option value="sales">
-💼 Продажи
-</option>
+        {% else %}
 
-<option value="documents">
-📄 Документы
-</option>
+        <div class="message ai">
+            🤖 <b>AI:</b><br>
+            {{ msg.text }}
+        </div>
 
-</select>
+        {% endif %}
 
+        {% endfor %}
 
-<br><br>
-
-
-<textarea 
-name="message"
-placeholder="Напишите ваш вопрос..."
-></textarea>
+    </div>
 
 
-<br>
+    <form action="/chat" method="post">
+
+        <select name="assistant">
+
+            <option value="customer">
+                📞 Клиентский менеджер
+            </option>
+
+            <option value="marketing">
+                ✍️ Маркетолог
+            </option>
+
+            <option value="sales">
+                💼 Продажи
+            </option>
+
+            <option value="documents">
+                📄 Документы
+            </option>
+
+        </select>
 
 
-<button>
-Отправить
-</button>
+        <br><br>
 
 
-</form>
+        <textarea
+            name="message"
+            placeholder="Напишите ваш вопрос..."
+        ></textarea>
+
+
+        <br><br>
+
+
+        <button>
+            Отправить
+        </button>
+
+
+    </form>
 
 </div>
 
